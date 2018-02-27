@@ -60,25 +60,28 @@ Piece.prototype.rotate = function() {		//rotate changes image position
 	}
 };
 
-var WALL = 1;
+//builds concept of a collision
+
+var WALL = 1;		
 var BLOCK = 2;
-Piece.prototype._collides = function(dx, dy, pat) {
+Piece.prototype._collides = function(dx, dy, pat) {		//builds loop that checks shapes to see if coordinates match 
+								//up with "floor" coordinates
 	for (var ix = 0; ix < pat.length; ix++) {
-		for (var iy = 0; iy < pat.length; iy++) {
-			if (!pat[ix][iy]) {
+		for (var iy = 0; iy < pat.length; iy++) {	//if the ground is not touched, keep shifting (by calling
+			if (!pat[ix][iy]) {			//continue function to call everything)
 				continue;
 			}
 
-			var x = this.x + ix + dx;
-			var y = this.y + iy + dy;
-			if (y >= height || x < 0 || x >= width) {
+			var x = this.x + ix + dx;		// this value sets the floor and wall coordinates on the corners
+			var y = this.y + iy + dy;		//so when generated, they don't span or land with shapes popping fro
+			if (y >= height || x < 0 || x >= width) {	//from corners/sides
 				return WALL;
 			}
 			if (y < 0) {
 				// Ignore negative space rows
 				continue;
 			}
-			if (board[y][x] !== "") {
+			if (board[y][x] !== "") {	//if no whitespace, then a block should appear. Checks for error throws
 				return BLOCK;
 			}
 		}
@@ -182,7 +185,7 @@ Piece.prototype.draw = function(ctx) {		//draw creates images and eliminates whi
 	this._fill(this.color);
 };
 
-var pieces = [
+var pieces = [			//colours of the pieces used
 	[I, "cyan"],
 	[J, "blue"],
 	[L, "orange"],
@@ -209,8 +212,8 @@ document.body.addEventListener("keyup", function (e) {			//move up
 	downI[e.keyCode] = null;
 }, false);
 
-function key(k) {
-	if (done) {
+function key(k) {		//clarifies key codes by making them into functions so when they get called above it's easier
+	if (done) {		//to understand. Googleing javascript keycodes shows the meaning of each number 
 		return;
 	}
 	if (k == 38) { // Player pressed up
@@ -232,7 +235,7 @@ function key(k) {
 
 function drawBoard() {			//draws the entire board
 	var fs = ctx.fillStyle;
-	for (var y = 0; y < height; y++) {
+	for (var y = 0; y < height; y++) {		//draws board but keeps checking coordinates so space covered is identical
 		for (var x = 0; x < width; x++) {
 			ctx.fillStyle = board[y][x] || clear;
 			drawSquare(x, y, tilesz, tilesz);
@@ -245,8 +248,8 @@ function main() {			//calls function to begin game right when button is tapped
 	var now = Date.now();
 	var delta = now - dropStart;
 
-	if (delta > 1000) {
-		piece.down();
+	if (delta > 1000) {	//shifts pieces downwards
+		piece.down();	
 		dropStart = now;
 	}
 
